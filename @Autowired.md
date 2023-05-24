@@ -82,5 +82,64 @@ public class PracticeProjectApplication {
     }
 }
 ```
-Here, @Component is creating beans of BInarySearch and BubbleSort class. @Autowired creating the dependencies between them.  
-When, @Autowired is used then no need to implement the constructor for that instance variable.
+Here, @Component is creating beans of BInarySearch and BubbleSort class. @Autowired creating the dependencies between them.
+
+**Autowiring by Name:**  
+When a bean has a dependencies on multiple beans than @Primary is being used. Another approach id autowiring bu name.
+
+**Example:**  
+```java
+public interface SortAlgo {
+	public int[] sort(int[] numbers);
+
+}
+//@Primary annotation is not used
+@Component
+public class BubbleSort implements SortAlgo{
+
+	@Override
+	public int[] sort(int[] numbers) {
+		return numbers;
+	}
+}
+
+@Component
+public class QuickSort implements SortAlgo{
+
+	@Override
+	public int[] sort(int[] numbers) {
+		return numbers;
+	}
+}
+
+@Component
+public class BinarySearch {
+
+    @Autowired
+	private SortAlgo bubbleSort;    //autowiring by name. @Component created a bean named bubbleSort of class BubbleSort.
+	
+	public BinarySearch(SortAlgo bubbleSort) {
+		super();
+		this.bubbleSort = bubbleSort;
+	}
+
+
+	public int searchNumber(int[] numbers) {
+		System.out.println(bubbleSort);	
+		return 3;
+	}
+}
+
+@SpringBootApplication
+public class PracticeProjectApplication {
+
+	public static void main(String[] args) {
+
+		ApplicationContext ac=SpringApplication.run(PracticeProjectApplication.class, args);
+		
+		BinarySearch bs= ac.getBean(BinarySearch.class);
+		bs.searchNumber(new int[] {2,3,4});
+	}
+
+}
+```
