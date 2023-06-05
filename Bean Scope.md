@@ -92,6 +92,7 @@ public class PracticeProjectScopeApplication {
 		
 		logger.info("{}",person);			//PersonDao@1f1cae23
 		logger.info("{}",person.getJdbc());	//JdbcConnection@1eaf1e62
+		logger.info("{}",person.getJdbc());	//JdbcConnection@5631962 
 		
 		logger.info("{}",person2);			//PersonDao@1f1cae23
 		logger.info("{}",person2.getJdbc()); //JdbcConnection@c81fd12
@@ -100,3 +101,9 @@ public class PracticeProjectScopeApplication {
 
 }
 ```
+
+## Difference between Spring Singleton and Gang of Four (GOF) Singleton
+
+As of GOF singleton scope, an instance will be created per JVM. Meaning what ever the situation is a program is running on a single JVM and it creates a single instance per JVM.
+
+As of Spring singleton, an instance is created per ApplicationContext. If a program contains multiple ApplicationContext then single instance will be created for each ApplicationContext.
