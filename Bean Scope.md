@@ -44,3 +44,59 @@ public class BinarySearch {
         
 	}
 ```
+
+## Complex Scope Scenario- Mix prototype and singleton
+
+The sub class has a scope prototype and the dependent class has a scope singleton.
+
+```java
+@Component
+@Scope(value=ConfigurableBeanFactory.SCOPE_PROTOTYPE, proxyMode=ScopedProxyMode.TARGET_CLASS)
+public class JdbcConnection {
+	
+	public JdbcConnection() {
+		System.out.println("Jdbc Connection");
+	}
+
+}
+
+
+@Component
+//@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class PersonDao {
+	
+	@Autowired
+	public JdbcConnection jdbc;
+
+	public JdbcConnection getJdbc() {
+		return jdbc;
+	}
+
+	public void setJdbc(JdbcConnection jdbc) {
+		this.jdbc = jdbc;
+	}
+
+}
+
+@SpringBootApplication
+public class PracticeProjectScopeApplication {
+
+	private static Logger logger= LoggerFactory.getLogger(PracticeProjectScopeApplication.class);
+	
+	public static void main(String[] args) {
+
+		ApplicationContext ac=SpringApplication.run(PracticeProjectScopeApplication.class, args);
+		
+		PersonDao person= ac.getBean(PersonDao.class);
+		PersonDao person2= ac.getBean(PersonDao.class);
+		
+		logger.info("{}",person);			//PersonDao@1f1cae23
+		logger.info("{}",person.getJdbc());	//JdbcConnection@1eaf1e62
+		
+		logger.info("{}",person2);			//PersonDao@1f1cae23
+		logger.info("{}",person2.getJdbc()); //JdbcConnection@c81fd12
+		
+	}
+
+}
+```
