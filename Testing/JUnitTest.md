@@ -119,3 +119,65 @@ Test02          //Test
 After           //@AfterEach
 After Class     //@AfterAll
 ```
+
+### Spring-boot testing using JUnit
+
+```java
+//Source folder
+package com.crud.springboot.basic;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+public class BinarySearch {
+	
+	private Logger logger= LoggerFactory.getLogger(this.getClass());
+	
+	@Autowired
+	@Qualifier("bubble")
+	private SortAlgo sortAlgo;
+
+	public int searchNumber(int[] numbers) {
+		System.out.println(sortAlgo);	
+		return 3;
+	}
+}
+
+//Test folder
+package com.crud.springboot.basic;	//package name should be same as the source folder
+
+import static org.junit.Assert.*;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.crud.springboot.PracticeProjectApplication;
+
+@RunWith(SpringRunner.class)
+@ContextConfiguration(classes=PracticeProjectApplication.class)
+public class BinarySearchTest {
+	
+	@Autowired
+	BinarySearch bs;
+
+	@Test
+	public void test() {
+
+		int res= bs.searchNumber(new int[] {1,2,3} );
+		assertEquals(3,res);
+	}
+
+}
+
+```
